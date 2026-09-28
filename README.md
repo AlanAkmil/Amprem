@@ -1,112 +1,109 @@
-# ⚡ AM SCRAPER // BRUTAL EDITION
+![Alight Motion Premium Creator](public/images/og-image.jpg)
 
-> Neo-Brutalism UI for AM Scraper — Full client-side, zero backend required.
+# Alight Motion Premium Creator (Next.js)
 
-![Brutalism](https://img.shields.io/badge/STYLE-Brutalism-ff0055?style=for-the-badge)
-![Deploy](https://img.shields.io/badge/DEPLOY-Vercel%20%7C%20GitHub%20Pages-00ff41?style=for-the-badge)
-![Version](https://img.shields.io/badge/VERSION-2.0-00d4ff?style=for-the-badge)
+**Layanan gratis & unofficial** untuk aktivasi Alight Motion Premium, dibuat oleh **Hidaka401**.
 
----
+![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-v4-06B6D4?logo=tailwindcss&logoColor=white)
+![Status](https://img.shields.io/badge/status-unofficial-lightgrey)
 
-## 🎨 Design Philosophy
+> Gratis • Unofficial • Not for Resale — bukan produk resmi Alight Creative.
 
-**Neo-Brutalism + Code Brutalism** — Bold, raw, unapologetic.
+Hasil konversi dari versi React + TanStack Start (Vite) ke **Next.js 15 (App Router)**,
+dengan tampilan (UI/UX) yang dipertahankan sama seperti versi asli, hanya dioptimasi agar
+lebih ringan dan cepat (Next.js Image, code-splitting per-route otomatis, font & CSS
+preload). Semua penyebutan "Nimzz" / "Nimzz AI" diganti menjadi **Hidaka401** / **Hidaka Ai**,
+dan palet warna diperkaya (gradient ungu–teal–amber) agar tidak lagi terasa hanya putih/biru.
 
-- Thick 3px borders with hard black shadows
-- Monospace typography (JetBrains Mono)
-- Neon accent colors (#00ff41, #ff0055, #00d4ff)
-- CRT scanline & noise overlay
-- Glitch text effects
-- Terminal-style logging
+## Fitur & Halaman
 
----
+| Route | Deskripsi |
+|---|---|
+| `/` | Landing page — ringkasan layanan, checklist syarat, quick FAQ |
+| `/aktivasi` | Alur aktivasi 5 langkah (input email → kirim link → salin magic link → verifikasi → selesai) |
+| `/panduan` | Panduan step-by-step lengkap dengan screenshot, untuk pemula |
+| `/troubleshooting` | Solusi error umum: email tidak masuk, `INVALID_EMAIL`, `INVALID_OOB_CODE`, `EXPIRED_OOB_CODE`, `TOO_MANY_ATTEMPTS`, API offline, dll |
+| `/faq` | Pertanyaan yang sering ditanyakan |
+| `/status` | Cek status API (online/offline, versi, uptime) + info paket |
+| `/sistem` | Penjelasan cara kerja sistem & alur data |
+| `/donasi` | Donasi sukarela via QRIS + upload bukti transfer (dikirim ke Telegram) |
+| `/api/hidaka-ai` | Endpoint chat streaming untuk asisten "Hidaka Ai" |
 
-## 🚀 Quick Deploy
+**Hidaka Ai** — chatbot bawaan (`HidakaAi.tsx`) yang fokus bantu user yang stuck (paling
+sering di step "cari magic link di email"), dilengkapi filter kata kasar, filter
+anti-jailbreak, dan rate limit per-IP.
 
-### Option A: GitHub Pages (Free)
+## Tech Stack
+
+- **Next.js 15** (App Router, Route Handlers, React Server Components)
+- **React 19** + TypeScript
+- **Tailwind CSS v4**
+- **TanStack Query** (client-side data fetching status/info)
+- **Radix UI** (accordion, dialog, label) + **Vaul** (drawer) + **Sonner** (toast)
+
+## Instalasi
 
 ```bash
-# 1. Fork / clone this repo
-git clone https://github.com/YOUR_USERNAME/am-scraper-brutal.git
-
-# 2. Go to Settings > Pages
-# 3. Source: Deploy from a branch → main → / (root)
-# 4. Your site will be live at:
-#    https://YOUR_USERNAME.github.io/am-scraper-brutal/
+npm install
+cp .env.example .env.local
+npm run dev
 ```
 
-### Option B: Vercel (Recommended)
+## Environment Variables
+
+Lihat `.env.example`:
+
+- `API_BASE_URL` — URL backend API aktivasi (server-side saja, bukan secret). Default
+  mengarah ke API demo lama; **ganti ke API kamu sendiri** kalau punya backend berbeda.
+- `NEXT_PUBLIC_SITE_URL` — URL publik website ini (untuk canonical/OG/sitemap).
+- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — SECRET, hanya diset di dashboard Vercel
+  (Environment Variables), untuk terima bukti transfer donasi.
+
+> Catatan: URL sosial media (`socialLinks`) di `src/config/site.ts` masih memakai akun
+> lama. Ganti `href` di file itu ke akun kamu sendiri.
+
+## Build & Deploy
 
 ```bash
-# 1. Fork this repo to your GitHub
-# 2. Go to https://vercel.com/new
-# 3. Import your forked repo
-# 4. Framework Preset: Other
-# 5. Deploy!
+npm run build
+npm run start
 ```
 
-Or use Vercel CLI:
+Deploy paling mudah lewat [Vercel](https://vercel.com): import repo, isi Environment
+Variables sesuai `.env.example`, lalu deploy.
 
-```bash
-npm i -g vercel
-vercel --prod
-```
-
----
-
-## 📁 Project Structure
+## Struktur Folder
 
 ```
-am-scraper-brutal/
-├── index.html          # Main HTML entry point
-├── assets/
-│   ├── style.css       # Brutalist styles
-│   └── app.js          # Core scraper logic
-├── vercel.json         # Vercel deployment config
-├── LICENSE             # MIT License
-└── README.md           # This file
+src/
+  app/                      route Next.js App Router (tiap folder = 1 URL)
+    api/                     route handlers (pengganti server function TanStack)
+    aktivasi/ panduan/ ...   halaman
+    layout.tsx               shell aplikasi (Navbar, Footer, BottomNav, Hidaka Ai)
+    globals.css              tema warna & utility Tailwind
+  components/
+    site/                    komponen khusus halaman (ActivationFlow, HidakaAi, dst)
+    ui/                      komponen dasar (button, input, dialog, dst)
+  config/                    site.ts (branding/sosial), api.ts (endpoint API)
+  lib/                       logika server (am-api.server.ts, donation.server.ts, ...)
+  hooks/                     use-api-status.ts
 ```
 
----
+## Catatan Keamanan
 
-## ⚙️ How It Works
+- Endpoint `/api/hidaka-ai` punya rate limit per-IP serta filter kata kasar & anti-jailbreak.
+- Semua endpoint POST menolak request lintas-origin (`src/lib/security.ts`).
+- Website tidak pernah menampilkan token, secret, atau credential internal apa pun.
 
-| Step | Action | API Endpoint |
-|------|--------|-------------|
-| 1 | Enter target email | — |
-| 2 | Initialize session | `GET /api/cookie` |
-| 3 | Send verification link | `POST /api/send` |
-| 4 | Paste magic link from inbox | — |
-| 5 | Verify & extract user data | `POST /api/verify` |
+## Disclaimer
 
-All API calls are made **directly from the browser** using `fetch()`.
+Website ini merupakan layanan unofficial yang dibuat oleh **Hidaka401** dan bukan
+merupakan website resmi Alight Motion atau Alight Creative. Layanan disediakan secara
+gratis dan tidak untuk diperjualbelikan.
 
----
+## Lisensi
 
-## ⚠️ CORS Notice
-
-The target API (`am.yappi.my.id`) must allow cross-origin requests (CORS) for this to work in the browser. If CORS is blocked, you have two options:
-
-1. **Use a CORS proxy** (add `https://cors-anywhere.herokuapp.com/` prefix)
-2. **Deploy a simple Edge Function** (see `api/` folder if needed)
-
----
-
-## 🛠️ Tech Stack
-
-- **HTML5** — Semantic markup
-- **CSS3** — Custom properties, animations, grid
-- **Vanilla JS** — No frameworks, no build step
-- **Google Fonts** — JetBrains Mono + Space Mono
-
----
-
-## 📜 License
-
-MIT License — do whatever you want. Just don't be a dick.
-
----
-
-<p align="center">
-  <sub>AM SCRAPER // BRUTAL EDITION // 2026</sub>
-</p>
+Dibuat dengan ❤️ oleh **Hidaka401**.
